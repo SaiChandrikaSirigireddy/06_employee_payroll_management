@@ -22,7 +22,7 @@ let dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'password', // Change as per your MySQL Workbench
+    password: process.env.DB_PASSWORD || 'YourNewPassword123', // Change as per your MySQL Workbench
     database: process.env.DB_NAME || 'payroll_db',
     multipleStatements: true
 };
