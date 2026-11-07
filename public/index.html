@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity - Employee Payroll Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Main Application Wrapper -->
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">Antigravity</span>
+                    <span class="brand-subtitle">Payroll System</span>
+                </div>
+            </div>
+
+            <div class="user-badge-mini">
+                <div class="avatar">SC</div>
+                <div class="user-details">
+                    <div class="user-name">Sai Chandrika</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="employees">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Employees</span>
+                </button>
+                <button class="nav-item" data-tab="salaries">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <span>Salary Details</span>
+                </button>
+                <button class="nav-item" data-tab="payroll">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Monthly Payroll</span>
+                </button>
+                <button class="nav-item" data-tab="reports">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <span>Salary Reports</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="db-status-btn" id="dbSettingsBtn">
+                    <span class="status-indicator" id="sidebarDbDot"></span>
+                    <span id="sidebarDbText">DB Status: Checking...</span>
+                </button>
+                <div class="footer-attribution">
+                    Designed with Antigravity AI
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="main-content">
+            
+            <!-- Top App Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                    <p class="page-description" id="pageDesc">Overview of organization payroll statistics and actions</p>
+                </div>
+                <div class="header-right">
+                    <div class="db-pill" id="headerDbPill">
+                        <span class="pulse-dot"></span>
+                        <span id="headerDbMode">Connecting...</span>
+                    </div>
+                    <div class="date-chip" id="currentDateDisplay">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button class="btn btn-primary" id="headerActionBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>+ Add Employee</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Notification Toast Container -->
+            <div id="toastContainer" class="toast-container"></div>
+
+            <!-- Tab 1: Dashboard -->
+            <section id="tab-dashboard" class="tab-pane active">
+                
+                <!-- Stat Cards Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Employees</span>
+                            <span class="stat-value" id="statTotalEmployees">0</span>
+                            <span class="stat-sub">Active staff members</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Disbursed (Paid)</span>
+                            <span class="stat-value" id="statTotalPaid">₹0.00</span>
+                            <span class="stat-sub">Completed transactions</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-yellow">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Pending Payouts</span>
+                            <span class="stat-value" id="statTotalPending">₹0.00</span>
+                            <span class="stat-sub">Awaiting clearance</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Average Net Salary</span>
+                            <span class="stat-value" id="statAvgSalary">₹0.00</span>
+                            <span class="stat-sub">Across all departments</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content Row -->
+                <div class="dash-columns">
+                    <!-- Recent Payroll Runs -->
+                    <div class="card col-main">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Recent Payroll Records</h3>
+                                <p class="card-sub">Latest processed salaries and payments</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline" id="btnQuickRunPayroll">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Run Payroll
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Dept & Designation</th>
+                                        <th>Period</th>
+                                        <th>Net Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentPayrollTableBody">
+                                    <tr><td colspan="6" class="text-center py-4">Loading payroll records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Department Salary Breakdown -->
+                    <div class="card col-side">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Department Budgets</h3>
+                                <p class="card-sub">Salary distribution per team</p>
+                            </div>
+                        </div>
+                        <div class="dept-list" id="deptBreakdownList">
+                            <div class="text-center py-4">Loading departments...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Employees Management -->
+            <section id="tab-employees" class="tab-pane">
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <div class="filter-group">
+                            <div class="search-input-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="employeeSearchInput" placeholder="Search by name, role, email...">
+                            </div>
+                            <select id="employeeDeptFilter" class="select-input">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btnAddNewEmployee">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Add Employee</span>
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Emp ID</th>
+                                    <th>Full Name</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Contact</th>
+                                    <th>Joining Date</th>
+                                    <th>Net Salary</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody">
+                                <tr><td colspan="8" class="text-center py-4">Loading employees...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 3: Salary Details Management -->
+            <section id="tab-salaries" class="tab-pane">
+                <!-- Salary Formula Banner -->
+                <div class="formula-banner">
+                    <div class="formula-icon">💡</div>
+                    <div class="formula-content">
+                        <strong>Salary Calculation Formula:</strong>
+                        <span class="formula-math">Net Salary = Basic Salary + Allowance - Deduction</span>
+                        <p class="formula-note">Deductions include Professional Tax, Provident Fund (PF), and TDS. Allowances cover HRA, DA, and Special Incentives.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <div class="filter-group">
+                            <div class="search-input-wrap">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="salarySearchInput" placeholder="Filter employee salaries...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Salary ID</th>
+                                    <th>Emp ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Basic Salary (₹)</th>
+                                    <th>Allowance (₹)</th>
+                                    <th>Deduction (₹)</th>
+                                    <th>Net Salary (₹)</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salariesTableBody">
+                                <tr><td colspan="9" class="text-center py-4">Loading salary records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 4: Monthly Payroll Processing -->
+            <section id="tab-payroll" class="tab-pane">
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <div class="filter-group flex-wrap">
+                            <select id="payrollMonthFilter" class="select-input">
+                                <option value="">All Months</option>
+                                <option value="1">January (1)</option>
+                                <option value="2">February (2)</option>
+                                <option value="3">March (3)</option>
+                                <option value="4">April (4)</option>
+                                <option value="5">May (5)</option>
+                                <option value="6">June (6)</option>
+                                <option value="7">July (7)</option>
+                                <option value="8">August (8)</option>
+                                <option value="9">September (9)</option>
+                                <option value="10">October (10)</option>
+                                <option value="11">November (11)</option>
+                                <option value="12">December (12)</option>
+                            </select>
+
+                            <select id="payrollYearFilter" class="select-input">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                            </select>
+
+                            <select id="payrollStatusFilter" class="select-input">
+                                <option value="">All Statuses</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                            </select>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-outline" id="btnBulkGeneratePayroll">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                <span>Batch Generate Month</span>
+                            </button>
+                            <button class="btn btn-primary" id="btnCreateSinglePayroll">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <span>+ New Payroll Entry</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Payroll ID</th>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Month / Year</th>
+                                    <th>Basic + Allow - Ded</th>
+                                    <th>Net Payout</th>
+                                    <th>Payment Date</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payrollTableBody">
+                                <tr><td colspan="9" class="text-center py-4">Loading payroll data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 5: Salary Reports -->
+            <section id="tab-reports" class="tab-pane">
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <div>
+                            <h3 class="card-title">Monthly Payroll & Salary Report</h3>
+                            <p class="card-sub">Generate, filter, print, and export comprehensive salary statements</p>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" id="btnExportCSV">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                <span>Export CSV</span>
+                            </button>
+                            <button class="btn btn-primary" id="btnPrintReport">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                <span>Print Report</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Report Filter Controls -->
+                    <div class="report-filters">
+                        <div class="filter-item">
+                            <label>Month:</label>
+                            <select id="reportMonthSelect" class="select-input">
+                                <option value="">All Months</option>
+                                <option value="1">January (1)</option>
+                                <option value="2">February (2)</option>
+                                <option value="3">March (3)</option>
+                                <option value="4">April (4)</option>
+                                <option value="5">May (5)</option>
+                                <option value="6">June (6)</option>
+                                <option value="7">July (7)</option>
+                                <option value="8">August (8)</option>
+                                <option value="9">September (9)</option>
+                                <option value="10">October (10)</option>
+                                <option value="11" selected>November (11)</option>
+                                <option value="12">December (12)</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Year:</label>
+                            <select id="reportYearSelect" class="select-input">
+                                <option value="2026" selected>2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Department:</label>
+                            <select id="reportDeptSelect" class="select-input">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Status:</label>
+                            <select id="reportStatusSelect" class="select-input">
+                                <option value="">All</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-secondary" id="btnApplyReportFilter">Apply Filter</button>
+                    </div>
+
+                    <!-- Report Summary Totals Bar -->
+                    <div class="report-summary-bar">
+                        <div class="sum-item">
+                            <span class="sum-title">Records Found</span>
+                            <span class="sum-value" id="reportCount">0</span>
+                        </div>
+                        <div class="sum-item">
+                            <span class="sum-title">Total Basic Pay</span>
+                            <span class="sum-value" id="reportTotalBasic">₹0.00</span>
+                        </div>
+                        <div class="sum-item">
+                            <span class="sum-title">Total Allowances</span>
+                            <span class="sum-value text-green" id="reportTotalAllowance">+₹0.00</span>
+                        </div>
+                        <div class="sum-item">
+                            <span class="sum-title">Total Deductions</span>
+                            <span class="sum-value text-red" id="reportTotalDeduction">-₹0.00</span>
+                        </div>
+                        <div class="sum-item highlight">
+                            <span class="sum-title">Net Total Payout</span>
+                            <span class="sum-value" id="reportTotalNet">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container" id="printableReportArea">
+                        <div class="print-only report-print-header">
+                            <h2>ANTIGRAVITIY EMPLOYEE PAYROLL MANAGEMENT SYSTEM</h2>
+                            <h3>Monthly Salary Statement Report</h3>
+                            <p id="reportPrintSubtitle">Generated by Sai Chandrika Sirigireddy</p>
+                            <hr>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Emp ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Month/Year</th>
+                                    <th>Basic (₹)</th>
+                                    <th>Allowance (₹)</th>
+                                    <th>Deduction (₹)</th>
+                                    <th>Net Salary (₹)</th>
+                                    <th>Payment Status</th>
+                                    <th>Payslip</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody">
+                                <tr><td colspan="11" class="text-center py-4">Select filters and load report...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================================
+         MODALS
+         ========================================================== -->
+
+    <!-- Modal 1: Add / Edit Employee -->
+    <div class="modal-backdrop" id="employeeModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="employeeModalTitle">Add New Employee</h3>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="employeeForm">
+                <input type="hidden" id="empFormMode" value="create">
+                <input type="hidden" id="empFormId" value="">
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empName">Full Name *</label>
+                            <input type="text" id="empName" required placeholder="e.g. Sai Chandrika">
+                        </div>
+                        <div class="form-group">
+                            <label for="empDepartment">Department *</label>
+                            <select id="empDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Human Resources">Human Resources</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Research & Development">Research & Development</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empDesignation">Designation *</label>
+                            <input type="text" id="empDesignation" required placeholder="e.g. Lead Software Architect">
+                        </div>
+                        <div class="form-group">
+                            <label for="empPhone">Phone Number *</label>
+                            <input type="tel" id="empPhone" required placeholder="e.g. 9876543210" pattern="[0-9]{10,15}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empEmail">Email Address *</label>
+                            <input type="email" id="empEmail" required placeholder="name@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="empJoiningDate">Joining Date *</label>
+                            <input type="date" id="empJoiningDate" required>
+                        </div>
+                    </div>
+
+                    <!-- Salary Breakdown Section (When Creating) -->
+                    <div id="empSalarySection" class="form-salary-box">
+                        <div class="salary-box-title">Initial Salary Structure</div>
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="empBasicSalary">Basic Salary (₹)</label>
+                                <input type="number" step="0.01" id="empBasicSalary" value="50000" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="empAllowance">Allowance (₹)</label>
+                                <input type="number" step="0.01" id="empAllowance" value="10000" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="empDeduction">Deduction (₹)</label>
+                                <input type="number" step="0.01" id="empDeduction" value="3000" min="0">
+                            </div>
+                        </div>
+                        <div class="calc-preview">
+                            <span>Computed Net Salary:</span>
+                            <strong id="empCalculatedNet">₹57,000.00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btnSaveEmployee">Save Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Edit Salary Structure -->
+    <div class="modal-backdrop" id="salaryModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Configure Employee Salary</h3>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="salaryForm">
+                <input type="hidden" id="salEmployeeId">
+                <div class="modal-body">
+                    <div class="selected-emp-banner" id="salEmpDisplay">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salBasic">Basic Salary (₹) *</label>
+                        <input type="number" step="0.01" id="salBasic" required min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salAllowance">Allowance (₹)</label>
+                        <input type="number" step="0.01" id="salAllowance" required min="0">
+                        <small class="field-hint">Includes HRA, medical, conveyance & bonus</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salDeduction">Deduction (₹)</label>
+                        <input type="number" step="0.01" id="salDeduction" required min="0">
+                        <small class="field-hint">Includes Provident Fund (PF), Income Tax (TDS), Professional Tax</small>
+                    </div>
+
+                    <div class="calc-box-highlight">
+                        <div class="calc-label">Total Net Salary Payable:</div>
+                        <div class="calc-val" id="salNetPreview">₹0.00</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Salary</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Record Single Payroll -->
+    <div class="modal-backdrop" id="payrollModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="payrollModalTitle">Record Monthly Payroll</h3>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="payrollForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="payEmployeeSelect">Select Employee *</label>
+                        <select id="payEmployeeSelect" required>
+                            <option value="">-- Choose Employee --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="payMonth">Month *</label>
+                            <select id="payMonth" required>
+                                <option value="1">1 - January</option>
+                                <option value="2">2 - February</option>
+                                <option value="3">3 - March</option>
+                                <option value="4">4 - April</option>
+                                <option value="5">5 - May</option>
+                                <option value="6">6 - June</option>
+                                <option value="7">7 - July</option>
+                                <option value="8">8 - August</option>
+                                <option value="9">9 - September</option>
+                                <option value="10">10 - October</option>
+                                <option value="11" selected>11 - November</option>
+                                <option value="12">12 - December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="payYear">Year *</label>
+                            <input type="number" id="payYear" value="2026" min="2000" max="2100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="payDate">Payment Date *</label>
+                            <input type="date" id="payDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="payStatus">Payment Status *</label>
+                            <select id="payStatus" required>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Process Payroll</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Batch Generate Payroll -->
+    <div class="modal-backdrop" id="batchPayrollModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Batch Generate Monthly Payroll</h3>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="batchPayrollForm">
+                <div class="modal-body">
+                    <p class="modal-info-text">
+                        This action will automatically generate payroll entries for <strong>all active employees</strong> with their configured salary structures.
+                    </p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="batchMonth">Select Month *</label>
+                            <select id="batchMonth" required>
+                                <option value="1">1 - January</option>
+                                <option value="2">2 - February</option>
+                                <option value="3">3 - March</option>
+                                <option value="4">4 - April</option>
+                                <option value="5">5 - May</option>
+                                <option value="6">6 - June</option>
+                                <option value="7">7 - July</option>
+                                <option value="8">8 - August</option>
+                                <option value="9">9 - September</option>
+                                <option value="10">10 - October</option>
+                                <option value="11" selected>11 - November</option>
+                                <option value="12">12 - December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="batchYear">Select Year *</label>
+                            <input type="number" id="batchYear" value="2026" min="2000" max="2100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="batchDate">Payment Date *</label>
+                            <input type="date" id="batchDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="batchStatus">Initial Status *</label>
+                            <select id="batchStatus" required>
+                                <option value="Pending">Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Processing">Processing</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Generate For All</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 5: Printable Professional Payslip -->
+    <div class="modal-backdrop" id="payslipModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header payslip-modal-header">
+                <h3 class="modal-title">Employee Salary Slip</h3>
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-sm" id="btnPrintSlip">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                        <span>Print Payslip</span>
+                    </button>
+                    <button class="modal-close" data-close-modal>&times;</button>
+                </div>
+            </div>
+
+            <div class="modal-body payslip-container" id="payslipPrintArea">
+                <!-- Corporate Payslip Card -->
+                <div class="payslip-card">
+                    <div class="payslip-header">
+                        <div class="company-info">
+                            <h2 class="company-name">ANTIGRAVITIY ENTERPRISES</h2>
+                            <p class="company-address">Payroll & Financial Services • Bangalore, India</p>
+                            <p class="company-reg">System Developer: Sai Chandrika Sirigireddy</p>
+                        </div>
+                        <div class="payslip-title-box">
+                            <div class="payslip-tag">SALARY PAYSLIP</div>
+                            <div class="payslip-period" id="psPeriod">November 2026</div>
+                        </div>
+                    </div>
+
+                    <div class="payslip-emp-grid">
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Employee ID:</span>
+                            <span class="ps-val" id="psEmpId">EMP-101</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Employee Name:</span>
+                            <span class="ps-val bold" id="psEmpName">Sai Chandrika</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Department:</span>
+                            <span class="ps-val" id="psDepartment">Engineering</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Designation:</span>
+                            <span class="ps-val" id="psDesignation">Lead Architect</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Email:</span>
+                            <span class="ps-val" id="psEmail">name@company.com</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Contact:</span>
+                            <span class="ps-val" id="psPhone">+91 9876543210</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Joining Date:</span>
+                            <span class="ps-val" id="psJoiningDate">2023-01-15</span>
+                        </div>
+                        <div class="emp-grid-item">
+                            <span class="ps-label">Payment Date / Status:</span>
+                            <span class="ps-val" id="psPaymentInfo">2026-11-05 (Paid)</span>
+                        </div>
+                    </div>
+
+                    <!-- Earnings and Deductions Side-by-Side -->
+                    <div class="payslip-breakdown-table">
+                        <div class="breakdown-col">
+                            <div class="breakdown-header earnings-hdr">Earnings (Credits)</div>
+                            <div class="breakdown-row">
+                                <span>Basic Salary</span>
+                                <span id="psBasic">₹0.00</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Allowances (HRA, DA, Special)</span>
+                                <span id="psAllowance">₹0.00</span>
+                            </div>
+                            <div class="breakdown-row total-row">
+                                <strong>Gross Earnings</strong>
+                                <strong id="psGross">₹0.00</strong>
+                            </div>
+                        </div>
+
+                        <div class="breakdown-col">
+                            <div class="breakdown-header deductions-hdr">Deductions (Debits)</div>
+                            <div class="breakdown-row">
+                                <span>PF / Professional Tax / TDS</span>
+                                <span id="psDeduction">₹0.00</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Other Withholdings</span>
+                                <span>₹0.00</span>
+                            </div>
+                            <div class="breakdown-row total-row">
+                                <strong>Total Deductions</strong>
+                                <strong id="psTotalDeductions">₹0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Net Salary Callout Box -->
+                    <div class="payslip-net-box">
+                        <div class="net-title">
+                            <span>NET SALARY PAYABLE:</span>
+                            <small>(Gross Earnings - Total Deductions)</small>
+                        </div>
+                        <div class="net-amount" id="psNetSalary">₹0.00</div>
+                    </div>
+
+                    <div class="payslip-footer">
+                        <div class="notes">
+                            <p><strong>Note:</strong> This is a computer-generated salary advice slip and does not require an ink signature.</p>
+                            <p>System Powered by Express.js & MySQL 8.0</p>
+                        </div>
+                        <div class="signature-box">
+                            <div class="sign-line"></div>
+                            <div class="sign-title">Authorized Signature (HR / Accounts)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 6: Database Connection Configuration -->
+    <div class="modal-backdrop" id="dbModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">MySQL Database Settings</h3>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="dbConfigForm">
+                <div class="modal-body">
+                    <div class="db-status-banner" id="dbModalStatusBanner">
+                        Checking database connection...
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dbHost">Database Host</label>
+                            <input type="text" id="dbHost" value="localhost" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbPort">Port</label>
+                            <input type="number" id="dbPort" value="3306" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dbUser">Username</label>
+                            <input type="text" id="dbUser" value="root" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbPassword">Password</label>
+                            <input type="password" id="dbPassword" placeholder="MySQL password (default: password)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dbName">Database Name</label>
+                        <input type="text" id="dbName" value="payroll_db" required>
+                    </div>
+
+                    <div class="db-guide-note">
+                        <strong>💡 Automatic Setup:</strong> If MySQL is active, tables <code>employees</code>, <code>salary_details</code>, and <code>payroll</code> are created and populated automatically. If MySQL is offline, the system seamlessly runs in <strong>High-Fidelity Demo Simulation Mode</strong>.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" data-close-modal>Close</button>
+                    <button type="submit" class="btn btn-primary" id="btnConnectDb">Connect & Apply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

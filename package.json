@@ -1,0 +1,26 @@
+{
+  "name": "antigravity-employee-payroll-management-system",
+  "version": "1.0.0",
+  "description": "Employee Payroll Management System - Developed with HTML5, CSS3, JavaScript, Node.js, Express.js and MySQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "payroll",
+    "employee-management",
+    "salary-calculation",
+    "express",
+    "mysql",
+    "nodejs"
+  ],
+  "author": "Sai Chandrika Sirigireddy & Antigravity AI",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0"
+  }
+}
